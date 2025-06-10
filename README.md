@@ -166,7 +166,7 @@
       <label for="usernames">Usernames (comma separated):</label>
       <input type="text" id="usernames" name="usernames" placeholder="e.g. Alice,Bob,Charlie" autocomplete="off" required />
       <label for="ap">Activity Points (comma separated):</label>
-      <input type="text" id="ap" name="ap" placeholder="e.g. 3,4,5" autocomplete="off" required />
+      <input type="text" id="ap" name="ap" placeholder="e.g. 0/4,1/4,2/4" autocomplete="off" required />
       <label for="strikes">Strikes (0-3, comma separated):</label>
       <input type="text" id="strikes" name="strikes" placeholder="e.g. 0,1,2" autocomplete="off" required />
       <button type="submit" aria-label="Check Quota">Check Quota</button>
@@ -269,7 +269,18 @@
       }
       const apValues = [];
       for(const val of apStrs) {
-        const num = parseInt(val, 10);
+        let num;
+        if (val.includes('/')) {
+          const parts = val.split('/');
+          if (parts.length === 2) {
+            num = parseInt(parts[0], 10);
+          } else {
+            num = NaN; // Invalid format
+          }
+        } else {
+          num = parseInt(val, 10);
+        }
+
         if(isNaN(num) || num < 0) {
           showError('Activity Points must be valid non-negative integers.');
           return;
@@ -309,4 +320,3 @@
 </script>
 </body>
 </html>
-
